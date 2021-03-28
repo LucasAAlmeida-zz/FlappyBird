@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class GameHandler : MonoBehaviour
 
     readonly Color[] colors = { Color.red, Color.blue, Color.green, Color.yellow };
     private bool isGameOver = false;
+    [SerializeField] private GameObject gameOverWindow;
 
     private void Awake()
     {
         Instance = this;
+        Time.timeScale = 1;
         StartCoroutine(CreateObstacles());
     }
 
@@ -60,10 +63,21 @@ public class GameHandler : MonoBehaviour
     {
         isGameOver = true;
         Time.timeScale = 0;
+        gameOverWindow.SetActive(true);
     }
 
     public bool IsGameOver()
     {
         return isGameOver;
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
