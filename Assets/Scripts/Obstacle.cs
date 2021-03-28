@@ -2,12 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obtacle : MonoBehaviour
+public class Obstacle : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private int wallScoreValue = 5;
     private readonly float positionToDestroyWallZ = -2;
     readonly static Color[] wallBodyColors = { Color.red, Color.blue, Color.green, Color.yellow };
+
+    public static IEnumerator CreateRoutine()
+    {
+        yield return new WaitForSeconds(1);
+        while (!GameHandler.Instance.IsGameOver) {
+            Create();
+            yield return new WaitForSeconds(5);
+        }
+    }
 
     public static void Create()
     {

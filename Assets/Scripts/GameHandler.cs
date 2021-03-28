@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,32 +10,33 @@ public class GameHandler : MonoBehaviour
     private int score;
     private int highScore;
 
-    private bool isGameOver = false;
+    public bool IsGameOver { get; private set; }
 
     private void Awake()
     {
         Instance = this;
+        IsGameOver = false;
         Time.timeScale = 1;
 
         score = 0;
         highScore = PlayerPrefs.GetInt("highscore");
-        GameWindow.Instance.UpdateHighScore(highScore);
 
-        StartCoroutine(CreateObstacles());
+        StartCoroutine(Obstacle.CreateRoutine());
     }
 
-    private IEnumerator CreateObstacles()
+    public void LoadMainMenu()
     {
-        yield return new WaitForSeconds(1);
-        while(!isGameOver) {
-            Obtacle.Create();
-            yield return new WaitForSeconds(5);
-        }
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    private void Start()
+    {
+        GameWindow.Instance.UpdateHighScore(highScore);
     }
 
     public void GameOver()
     {
-        isGameOver = true;
+        IsGameOver = true;
         Time.timeScale = 0;
         AssetHandler.Instance.gameOverWindow.SetActive(true);
         if (score > highScore) {

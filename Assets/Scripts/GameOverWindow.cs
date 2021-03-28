@@ -16,8 +16,8 @@ public class GameOverWindow : MonoBehaviour
         GameHandler.Instance.ReloadScene();
     }
 
-    public void OnQuitButtonClicked()
+    public void OnMainMenuButtonClicked()
     {
-        GameHandler.Instance.QuitGame();
+        GameHandler.Instance.LoadMainMenu();
     }
 }
