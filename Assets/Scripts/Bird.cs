@@ -9,6 +9,9 @@ public class Bird : MonoBehaviour
     [SerializeField] private float horizontalSpeed;
     private readonly float verticalRange = 7;
     private readonly float horizontalRange = 10;
+    private readonly float facingUpAngle = 225;
+    private readonly float facingDownAngle = 315;
+    private readonly float reboundForceIncrease = 0.1f;
 
     private void Awake()
     {
@@ -18,6 +21,13 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleHorizontalMovement();
+        HandleVerticalMovement();
+        HandleRotation();
+    }
+
+    private void HandleHorizontalMovement()
+    {
         var previousX = transform.position.x;
 
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -26,26 +36,32 @@ public class Bird : MonoBehaviour
         if (transform.position.x > horizontalRange || transform.position.x < -horizontalRange) {
             transform.position = new Vector3(previousX, transform.position.y, transform.position.z);
         }
-
+    }
+    private void HandleVerticalMovement()
+    {
         if (Input.GetKeyDown(KeyCode.Space)) {
             birdRb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-            transform.localEulerAngles = Vector3.left * 135;
+            transform.localEulerAngles = Vector3.right * facingUpAngle;
         }
 
+        var reboundForce = jumpForce * reboundForceIncrease;
         if (transform.position.y > verticalRange) {
-            birdRb.AddForce(Vector3.down * jumpForce * 0.1f, ForceMode.Impulse);
-            transform.localEulerAngles = Vector3.left * 45;
+            birdRb.AddForce(Vector3.down * reboundForce, ForceMode.VelocityChange);
+            transform.localEulerAngles = Vector3.right * facingDownAngle;
         } else if (transform.position.y < -verticalRange) {
-            birdRb.AddForce(Vector3.up * jumpForce * 0.1f, ForceMode.Impulse);
-            transform.localEulerAngles = Vector3.left * 135;
+            birdRb.AddForce(Vector3.up * reboundForce, ForceMode.VelocityChange);
+            transform.localEulerAngles = Vector3.right * facingUpAngle;
         }
-
+    }
+    private void HandleRotation()
+    {
         var previousEulerAngles = transform.localEulerAngles;
         transform.Rotate(Vector3.left * birdRb.velocity.y);
-        if (transform.localEulerAngles.x < 225 || transform.localEulerAngles.x > 315) {
+        if (transform.localEulerAngles.x < facingUpAngle || transform.localEulerAngles.x > facingDownAngle) {
             transform.localEulerAngles = previousEulerAngles;
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
