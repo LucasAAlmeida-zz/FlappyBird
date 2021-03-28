@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class AssetHandler : MonoBehaviour
 {
@@ -14,4 +13,6 @@ public class AssetHandler : MonoBehaviour
     }
 
     public GameObject obstaclePrefab;
+    public GameObject gameOverWindow;
+    public TextMeshProUGUI ScoreText;
 }

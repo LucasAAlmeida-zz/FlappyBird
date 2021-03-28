@@ -13,6 +13,7 @@ public class Obtacle : MonoBehaviour
 
         if (transform.position.z < -2) {
             //Passed successfully
+            GameHandler.Instance.AddToScore(5);
             Destroy(gameObject);
         }
     }

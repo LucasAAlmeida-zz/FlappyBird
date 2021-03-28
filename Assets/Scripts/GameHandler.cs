@@ -6,15 +6,16 @@ using UnityEngine.SceneManagement;
 public class GameHandler : MonoBehaviour
 {
     public static GameHandler Instance { get; private set; }
+    private int score;
 
     readonly Color[] colors = { Color.red, Color.blue, Color.green, Color.yellow };
     private bool isGameOver = false;
-    [SerializeField] private GameObject gameOverWindow;
 
     private void Awake()
     {
         Instance = this;
         Time.timeScale = 1;
+        score = 0;
         StartCoroutine(CreateObstacles());
     }
 
@@ -63,7 +64,7 @@ public class GameHandler : MonoBehaviour
     {
         isGameOver = true;
         Time.timeScale = 0;
-        gameOverWindow.SetActive(true);
+        AssetHandler.Instance.gameOverWindow.SetActive(true);
     }
 
     public bool IsGameOver()
@@ -79,5 +80,11 @@ public class GameHandler : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void AddToScore(int scoreToAdd)
+    {
+        score += scoreToAdd;
+        AssetHandler.Instance.ScoreText.text = "Score: " + score;
     }
 }
