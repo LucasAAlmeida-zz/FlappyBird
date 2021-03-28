@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
+    public static GameHandler Instance { get; private set; }
+
     readonly Color[] colors = { Color.red, Color.blue, Color.green, Color.yellow };
+    private bool isGameOver = false;
 
     private void Awake()
     {
+        Instance = this;
         StartCoroutine(CreateObstacles());
     }
 
     private IEnumerator CreateObstacles()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         while(true) {
             var gapSize = Random.Range(5, 15);
             var gapPosition = Random.Range(-10, 10);
@@ -50,5 +54,16 @@ public class GameHandler : MonoBehaviour
             Renderer r = child.GetComponent<Renderer>();
             r.material.color = color;
         }
+    }
+
+    public void GameOver()
+    {
+        isGameOver = true;
+        Time.timeScale = 0;
+    }
+
+    public bool IsGameOver()
+    {
+        return isGameOver;
     }
 }

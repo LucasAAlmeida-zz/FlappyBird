@@ -11,25 +11,9 @@ public class Obtacle : MonoBehaviour
     {
         transform.Translate(Vector3.back * Time.deltaTime * speed, Space.World);
 
-        if (transform.position.z < 10) {
-            var child0 = transform.GetChild(0);
-            var child1 = transform.GetChild(1);
-
-            List<Transform> children = new List<Transform>();
-            children.Add(child0.GetChild(0));
-            children.Add(child0.GetChild(1));
-            children.Add(child1.GetChild(0));
-            children.Add(child1.GetChild(1));
-            
-            foreach(var child in children) {
-                Renderer r = child.GetComponent<Renderer>();
-                Color materialColor = r.material.color;
-                r.material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.5f);
-            }
-
-
-
-
+        if (transform.position.z < -2) {
+            //Passed successfully
+            Destroy(gameObject);
         }
     }
 }
