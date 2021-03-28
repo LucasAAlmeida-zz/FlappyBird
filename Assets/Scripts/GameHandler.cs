@@ -7,6 +7,7 @@ public class GameHandler : MonoBehaviour
 {
     public static GameHandler Instance { get; private set; }
     private int score;
+    private int highScore;
 
     readonly Color[] colors = { Color.red, Color.blue, Color.green, Color.yellow };
     private bool isGameOver = false;
@@ -16,6 +17,8 @@ public class GameHandler : MonoBehaviour
         Instance = this;
         Time.timeScale = 1;
         score = 0;
+        highScore = PlayerPrefs.GetInt("highscore");
+        GameWindow.Instance.UpdateHighScore(highScore);
         StartCoroutine(CreateObstacles());
     }
 
@@ -48,14 +51,14 @@ public class GameHandler : MonoBehaviour
 
         obstacleTransform.Translate(Vector3.right * gapPosition);
 
-        List<Transform> children = new List<Transform> {
+        List<Transform> wallBodies = new List<Transform> {
             leftWall.GetChild(0),
             rightWall.GetChild(0)
         };
 
         var color = colors[Random.Range(0, 4)];
-        foreach (var child in children) {
-            Renderer r = child.GetComponent<Renderer>();
+        foreach (var wallBody in wallBodies) {
+            Renderer r = wallBody.GetComponent<Renderer>();
             r.material.color = color;
         }
     }
@@ -65,6 +68,10 @@ public class GameHandler : MonoBehaviour
         isGameOver = true;
         Time.timeScale = 0;
         AssetHandler.Instance.gameOverWindow.SetActive(true);
+        if (score > highScore) {
+            PlayerPrefs.SetInt("highscore", score);
+            GameWindow.Instance.UpdateHighScore(score);
+        }
     }
 
     public bool IsGameOver()
@@ -85,6 +92,6 @@ public class GameHandler : MonoBehaviour
     public void AddToScore(int scoreToAdd)
     {
         score += scoreToAdd;
-        AssetHandler.Instance.ScoreText.text = "Score: " + score;
+        GameWindow.Instance.UpdateScore(score);
     }
 }
