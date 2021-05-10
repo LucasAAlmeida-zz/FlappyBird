@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,18 +17,17 @@ public class GameHandler : MonoBehaviour
 
         score = 0;
         highScore = PlayerPrefs.GetInt("highscore");
+    }
 
+    private void Start()
+    {
         StartCoroutine(Obstacle.CreateRoutine());
+        GameWindow.Instance.UpdateHighScore(highScore);
     }
 
     public void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
-    }
-
-    private void Start()
-    {
-        GameWindow.Instance.UpdateHighScore(highScore);
     }
 
     public void GameOver()
